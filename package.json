@@ -1,0 +1,4 @@
+{
+	name: "dgerhardt-dojo",
+	dojoBuild: "dgerhardt-dojo.profile.js"
+}
