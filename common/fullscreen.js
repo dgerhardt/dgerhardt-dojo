@@ -1,11 +1,19 @@
 define(
 	[
-		"dojo/on"
+		"dojo/on",
+		"dojo/dom-construct",
+		"dojo/dom-style",
+		"dojo/domReady!"
 	],
-	function(on) {
+	function(on, domConstruct, domStyle) {
 		"use strict";
 		
-		var mode = null;
+		var
+			mode = null,
+			pageNode = null,
+			fsElement = null
+		;
+		
 		if (document.documentElement.requestFullscreen) {
 			mode = "w3c";
 		} else if (document.documentElement.webkitRequestFullscreen) {
@@ -17,7 +25,11 @@ define(
 		}
 		console.debug("Full screen mode support: " + (null != mode ? mode : "none"));
 		
-		return {
+		var fullScreen = {
+			setPageNode: function(node) {
+				pageNode = node;
+			},
+			
 			isSupported: function() {
 				return null != mode;
 			},
@@ -31,22 +43,34 @@ define(
 			},
 			
 			request: function(element) {
+				if (!this.isSupported()) {
+					return false;
+				}
+				
+				/* For compatibility reasons requestFullscreen is always called
+				 * for document.documentElement instead of the specific element */
+				var doc = document.documentElement;
 				if (null == element) {
-					element = document.documentElement;
+					fsElement = doc;
+				} else {
+					fsElement = element;
+					domStyle.set(pageNode, "display", "none");
+					domStyle.set(fullScreenNode, "display", "block");
+					domConstruct.place(element, fullScreenNode);
 				}
 				
 				switch (mode) {
 				case "w3c":
-					element.requestFullscreen();
+					doc.requestFullscreen();
 					break;
 				case "webkit":
-					element.webkitRequestFullScreen();
+					doc.webkitRequestFullScreen();
 					break;
 				case "moz":
-					element.mozRequestFullScreen();
+					doc.mozRequestFullScreen();
 					break;
 				case "ms":
-					element.msRequestFullscreen();
+					doc.msRequestFullscreen();
 					break;
 				default:
 					return false;
@@ -94,5 +118,26 @@ define(
 				});
 			},
 		};
+		
+		var fullScreenNode = domConstruct.create("div", {id: "fullScreenWrapper"}, document.body);
+		domStyle.set(fullScreenNode, "display", "none");
+		domStyle.set(fullScreenNode, "width", "100%");
+		domStyle.set(fullScreenNode, "height", "100%");
+		
+		fullScreen.onChange(function(event, isActive) {
+			if (!isActive) {
+				domStyle.set(fullScreenNode, "display", "none");
+				domStyle.set(pageNode, "display", "block");
+				fsElement = null;
+			}
+		});
+		
+		fullScreen.onError(function() {
+			domStyle.set(fullScreenNode, "display", "none");
+			domStyle.set(pageNode, "display", "block");
+			fsElement = null;
+		});
+		
+		return fullScreen;
 	}
 );
