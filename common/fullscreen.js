@@ -15,7 +15,9 @@ define(
 			pageNode = null,
 			fsElement = null,
 			listeners = [],
-			escapeKeyListener = null
+			escapeKeyListener = null,
+			infoDomNode = null,
+			infoTimeout = null
 		;
 		
 		if (document.documentElement.requestFullscreen) {
@@ -144,10 +146,17 @@ define(
 		domStyle.set(fullScreenNode, "width", "100%");
 		domStyle.set(fullScreenNode, "height", "100%");
 		
+		infoDomNode = domConstruct.create("div", {id: "fullScreenInfo", innerHTML: "Full screen mode activated. Press ESC (or double tap) to exit."}, document.body);
+		domStyle.set(infoDomNode, "display", "none");
+		
 		fullScreen.onChange(function(event, isActive) {
 			if (!isActive) {
 				domStyle.set(fullScreenNode, "display", "none");
 				domStyle.set(pageNode, "display", "block");
+				domStyle.set(infoDomNode, "display", "none");
+				if (null != infoTimeout) {
+					clearTimeout(infoTimeout);
+				}
 				fsElement = null;
 			}
 		});
@@ -158,6 +167,7 @@ define(
 				listeners[i](null, true);
 			}
 			startEscapeKeyListener();
+			showFullScreenInfo();
 		});
 		
 		on(fullScreenNode, tap.doubletap, function() {
@@ -173,6 +183,13 @@ define(
 					fullScreen.exit();
 				}
 			});
+		};
+		
+		var showFullScreenInfo = function() {
+			domStyle.set(infoDomNode, "display", "block");
+			infoTimeout = setTimeout(function() {
+				domStyle.set(infoDomNode, "display", "none");
+			}, 5000);
 		};
 		
 		return fullScreen;
