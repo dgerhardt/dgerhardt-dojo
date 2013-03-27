@@ -3,9 +3,10 @@ define(
 		"dojo/on",
 		"dojo/dom-construct",
 		"dojo/dom-style",
+		"dojox/gesture/tap",
 		"dojo/domReady!"
 	],
-	function(on, domConstruct, domStyle) {
+	function(on, domConstruct, domStyle, tap) {
 		"use strict";
 		
 		var
@@ -27,20 +28,6 @@ define(
 			mode = "ms";
 		}
 		console.debug("Full screen mode support: " + (null != mode ? mode : "none"));
-		
-		var startEscapeKeyListener = function() {
-			if (null != escapeKeyListener) {
-				escapeKeyListener.remove();
-			}
-			escapeKeyListener = on(document, "keydown", function(event) {
-				if (event.keyCode == KEY_ESC) {
-					escapeKeyListener.remove();
-					for (var i = 0; i < listeners.length; i++) {
-						listeners[i](null, false);
-					}
-				}
-			});
-		};
 		
 		var fullScreen = {
 			setPageNode: function(node) {
@@ -106,6 +93,9 @@ define(
 				domStyle.set(pageNode, "display", "block");
 				if (null != escapeKeyListener) {
 					escapeKeyListener.remove();
+					for (var i = 0; i < listeners.length; i++) {
+						listeners[i](null, false);
+					}
 				}
 				fsElement = null;
 				
@@ -169,6 +159,21 @@ define(
 			}
 			startEscapeKeyListener();
 		});
+		
+		on(fullScreenNode, tap.doubletap, function() {
+			fullScreen.exit();
+		});
+		
+		var startEscapeKeyListener = function() {
+			if (null != escapeKeyListener) {
+				escapeKeyListener.remove();
+			}
+			escapeKeyListener = on(document, "keydown", function(event) {
+				if (event.keyCode == KEY_ESC) {
+					fullScreen.exit();
+				}
+			});
+		};
 		
 		return fullScreen;
 	}
