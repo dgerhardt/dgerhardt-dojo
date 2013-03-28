@@ -14,11 +14,13 @@ define(
 			
 			resize: function() {
 				this.inherited(arguments);
+				var w = arguments[0] ? arguments[0].w : -1;
+				var h = arguments[0] ? arguments[0].h : -1;
 				this.emit("resize", {
 					bubbles: false,
 					cancelable: false,
-					w: arguments[0].w,
-					h: arguments[0].h
+					w: w,
+					h: h
 				});
 			}
 		});
