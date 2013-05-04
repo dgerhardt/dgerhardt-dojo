@@ -3,10 +3,9 @@ define(
 		"dojo/on",
 		"dojo/dom-construct",
 		"dojo/dom-style",
-		"dojox/gesture/tap",
 		"dojo/domReady!"
 	],
-	function(on, domConstruct, domStyle, tap) {
+	function(on, domConstruct, domStyle) {
 		"use strict";
 		
 		var
@@ -170,7 +169,7 @@ define(
 			showFullScreenInfo();
 		});
 		
-		on(fullScreenNode, tap.doubletap, function() {
+		on(fullScreenNode, "dblclick", function() {
 			fullScreen.exit();
 		});
 		
