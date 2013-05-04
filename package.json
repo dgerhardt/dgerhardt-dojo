@@ -1,4 +1,15 @@
 {
-	name: "dgerhardt-dojo",
-	dojoBuild: "dgerhardt-dojo.profile.js"
+	"name": "dgerhardt-dojo",
+	"dojoBuild": "dgerhardt-dojo.profile.js",
+	"contributors": [
+		{
+			"name": "Daniel Gerhardt"
+		}
+	],
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "http://opensource.org/licenses/MIT"
+		}
+	]
 }
