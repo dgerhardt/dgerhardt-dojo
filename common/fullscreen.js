@@ -8,7 +8,7 @@ define(
 	],
 	function(on, keys, domConstruct, domStyle) {
 		"use strict";
-		
+
 		var
 			mode = null,
 			pageNode = null,
@@ -18,7 +18,7 @@ define(
 			infoDomNode = null,
 			infoTimeout = null
 		;
-		
+
 		if (document.documentElement.requestFullscreen) {
 			mode = "w3c";
 		} else if (document.documentElement.webkitRequestFullscreen) {
@@ -29,20 +29,20 @@ define(
 			mode = "ms";
 		}
 		console.debug("Full screen mode support: " + (null != mode ? mode : "none"));
-		
+
 		var fullScreen = {
 			setPageNode: function(node) {
 				pageNode = node;
 			},
-			
+
 			isSupported: function() {
 				return null != mode;
 			},
-			
+
 			isEnabled: function() {
 				return this.isSupported() && (document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled);
 			},
-			
+
 			isActive: function() {
 				if ((document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement)
 					|| (null != fsElement && !this.isEnabled())
@@ -52,7 +52,7 @@ define(
 
 				return false;
 			},
-			
+
 			request: function(element) {
 				/* For compatibility reasons requestFullscreen is always called
 				 * for document.documentElement instead of the specific element */
@@ -65,7 +65,7 @@ define(
 					domStyle.set(fullScreenNode, "display", "block");
 					domConstruct.place(element, fullScreenNode);
 				}
-				
+
 				switch (mode) {
 				case "w3c":
 					doc.requestFullscreen();
@@ -88,7 +88,7 @@ define(
 					break;
 				}
 			},
-			
+
 			exit: function() {
 				domStyle.set(fullScreenNode, "display", "none");
 				domStyle.set(pageNode, "display", "block");
@@ -99,7 +99,7 @@ define(
 					}
 				}
 				fsElement = null;
-				
+
 				switch (mode) {
 				case "w3c":
 					document.exitFullscreen();
@@ -116,14 +116,14 @@ define(
 				default:
 					return false;
 				}
-				
+
 				return true;
 			},
-			
+
 			toggle: function(element) {
 				return this.isActive() ? this.exit() : this.request(element);
 			},
-			
+
 			onChange: function(listener) {
 				var self = this;
 
@@ -132,22 +132,22 @@ define(
 				});
 				listeners.push(listener);
 			},
-			
+
 			onError: function(listener) {
 				on(document, "fullscreenerror, webkitfullscreenerror, mozfullscreenerror, msfullscreenerror", function(event) {
 					listener(event);
 				});
 			},
 		};
-		
+
 		var fullScreenNode = domConstruct.create("div", {id: "fullScreenWrapper"}, document.body);
 		domStyle.set(fullScreenNode, "display", "none");
 		domStyle.set(fullScreenNode, "width", "100%");
 		domStyle.set(fullScreenNode, "height", "100%");
-		
+
 		infoDomNode = domConstruct.create("div", {id: "fullScreenInfo", innerHTML: "Full screen mode activated. Press ESC (or double tap) to exit."}, document.body);
 		domStyle.set(infoDomNode, "display", "none");
-		
+
 		fullScreen.onChange(function(event, isActive) {
 			if (!isActive) {
 				domStyle.set(fullScreenNode, "display", "none");
@@ -159,7 +159,7 @@ define(
 				fsElement = null;
 			}
 		});
-		
+
 		fullScreen.onError(function() {
 			/* call onChange listeners manually */
 			for (var i = 0; i < listeners.length; i++) {
@@ -168,11 +168,11 @@ define(
 			startEscapeKeyListener();
 			showFullScreenInfo();
 		});
-		
+
 		on(fullScreenNode, "dblclick", function() {
 			fullScreen.exit();
 		});
-		
+
 		var startEscapeKeyListener = function() {
 			if (null != escapeKeyListener) {
 				escapeKeyListener.remove();
@@ -183,14 +183,14 @@ define(
 				}
 			});
 		};
-		
+
 		var showFullScreenInfo = function() {
 			domStyle.set(infoDomNode, "display", "block");
 			infoTimeout = setTimeout(function() {
 				domStyle.set(infoDomNode, "display", "none");
 			}, 5000);
 		};
-		
+
 		return fullScreen;
 	}
 );

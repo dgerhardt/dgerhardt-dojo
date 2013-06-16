@@ -6,7 +6,7 @@ define(
 	],
 	function(domConstruct, Button, Dialog) {
 		"use strict";
-		
+
 		return {
 			confirm: function(title, message, buttons) {
 				var dialog = null;
