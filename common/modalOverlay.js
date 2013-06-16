@@ -8,6 +8,8 @@ define(
 		"dijit/a11yclick"
 	],
 	function(on, keys, dom, domConstruct, domStyle, a11yclick) {
+		"use strict";
+
 		var
 			self = null,
 
@@ -34,9 +36,7 @@ define(
 					});
 				}
 
-				if (onHide) {
-					self.onHide = onHide;
-				}
+				self.onHide = onHide;
 
 				/* event capture phase not yet supported by dojo/on */
 				document.addEventListener("focus", self.onFocus, true);
@@ -44,7 +44,9 @@ define(
 			},
 
 			hide: function() {
-				self.onHide();
+				if (self.onHide) {
+					self.onHide();
+				}
 				document.removeEventListener("focus", self.onFocus, true);
 				domConstruct.destroy(overlayNode);
 			},
@@ -56,10 +58,6 @@ define(
 					var focusElement = overlayNode;
 					focusElement.focus();
 				}
-			},
-
-			onHide: function() {
-
 			}
 		};
 
