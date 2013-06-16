@@ -1,15 +1,15 @@
 define(
 	[
 		"dojo/on",
+		"dojo/keys",
 		"dojo/dom-construct",
 		"dojo/dom-style",
 		"dojo/domReady!"
 	],
-	function(on, domConstruct, domStyle) {
+	function(on, keys, domConstruct, domStyle) {
 		"use strict";
 		
 		var
-			KEY_ESC = 27,
 			mode = null,
 			pageNode = null,
 			fsElement = null,
@@ -178,7 +178,7 @@ define(
 				escapeKeyListener.remove();
 			}
 			escapeKeyListener = on(document, "keydown", function(event) {
-				if (event.keyCode == KEY_ESC) {
+				if (keys.ESCAPE === event.keyCode) {
 					fullScreen.exit();
 				}
 			});
