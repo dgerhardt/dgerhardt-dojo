@@ -4,15 +4,15 @@ define(
 		"dojo/Evented",
 		"dijit/layout/ContentPane"
 	],
-	function(declare, Evented, ContentPane) {
+	function (declare, Evented, ContentPane) {
 		//"use strict";
-		
+
 		return declare("ContentPane", [ContentPane, Evented], {
-			constructor: function() {
+			constructor: function () {
 				this.inherited(arguments);
 			},
-			
-			resize: function() {
+
+			resize: function () {
 				this.inherited(arguments);
 				var w = arguments[0] ? arguments[0].w : -1;
 				var h = arguments[0] ? arguments[0].h : -1;

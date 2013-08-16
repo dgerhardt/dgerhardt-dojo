@@ -6,7 +6,7 @@ define(
 		"dojo/dom-style",
 		"dojo/domReady!"
 	],
-	function(on, keys, domConstruct, domStyle) {
+	function (on, keys, domConstruct, domStyle) {
 		"use strict";
 
 		var
@@ -31,19 +31,19 @@ define(
 		console.debug("Full screen mode support: " + (null != mode ? mode : "none"));
 
 		var fullScreen = {
-			setPageNode: function(node) {
+			setPageNode: function (node) {
 				pageNode = node;
 			},
 
-			isSupported: function() {
+			isSupported: function () {
 				return null != mode;
 			},
 
-			isEnabled: function() {
+			isEnabled: function () {
 				return this.isSupported() && (document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled);
 			},
 
-			isActive: function() {
+			isActive: function () {
 				if ((document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement)
 					|| (null != fsElement && !this.isEnabled())
 				) {
@@ -53,7 +53,7 @@ define(
 				return false;
 			},
 
-			request: function(element) {
+			request: function (element) {
 				/* For compatibility reasons requestFullscreen is always called
 				 * for document.documentElement instead of the specific element */
 				var doc = document.documentElement;
@@ -89,7 +89,7 @@ define(
 				}
 			},
 
-			exit: function() {
+			exit: function () {
 				domStyle.set(fullScreenNode, "display", "none");
 				domStyle.set(pageNode, "display", "block");
 				if (null != escapeKeyListener) {
@@ -120,11 +120,11 @@ define(
 				return true;
 			},
 
-			toggle: function(element) {
+			toggle: function (element) {
 				return this.isActive() ? this.exit() : this.request(element);
 			},
 
-			onChange: function(listener) {
+			onChange: function (listener) {
 				var self = this;
 
 				on(document, "fullscreenchange, webkitfullscreenchange, mozfullscreenchange, msfullscreenchange", function(event) {
@@ -133,7 +133,7 @@ define(
 				listeners.push(listener);
 			},
 
-			onError: function(listener) {
+			onError: function (listener) {
 				on(document, "fullscreenerror, webkitfullscreenerror, mozfullscreenerror, msfullscreenerror", function(event) {
 					listener(event);
 				});
@@ -148,7 +148,7 @@ define(
 		infoDomNode = domConstruct.create("div", {id: "fullScreenInfo", innerHTML: "Full screen mode activated. Press ESC (or double tap) to exit."}, document.body);
 		domStyle.set(infoDomNode, "display", "none");
 
-		fullScreen.onChange(function(event, isActive) {
+		fullScreen.onChange(function (event, isActive) {
 			if (!isActive) {
 				domStyle.set(fullScreenNode, "display", "none");
 				domStyle.set(pageNode, "display", "block");
@@ -160,7 +160,7 @@ define(
 			}
 		});
 
-		fullScreen.onError(function() {
+		fullScreen.onError(function () {
 			/* call onChange listeners manually */
 			for (var i = 0; i < listeners.length; i++) {
 				listeners[i](null, true);
@@ -169,24 +169,24 @@ define(
 			showFullScreenInfo();
 		});
 
-		on(fullScreenNode, "dblclick", function() {
+		on(fullScreenNode, "dblclick", function () {
 			fullScreen.exit();
 		});
 
-		var startEscapeKeyListener = function() {
+		var startEscapeKeyListener = function () {
 			if (null != escapeKeyListener) {
 				escapeKeyListener.remove();
 			}
-			escapeKeyListener = on(document, "keydown", function(event) {
+			escapeKeyListener = on(document, "keydown", function (event) {
 				if (keys.ESCAPE === event.keyCode) {
 					fullScreen.exit();
 				}
 			});
 		};
 
-		var showFullScreenInfo = function() {
+		var showFullScreenInfo = function () {
 			domStyle.set(infoDomNode, "display", "block");
-			infoTimeout = setTimeout(function() {
+			infoTimeout = setTimeout(function () {
 				domStyle.set(infoDomNode, "display", "none");
 			}, 5000);
 		};

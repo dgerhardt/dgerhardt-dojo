@@ -4,19 +4,19 @@ define(
 		"dijit/form/Button",
 		"dijit/Dialog"
 	],
-	function(domConstruct, Button, Dialog) {
+	function (domConstruct, Button, Dialog) {
 		"use strict";
 
 		return {
-			confirm: function(title, message, buttons) {
+			confirm: function (title, message, buttons) {
 				var dialog = null;
 				var confirmContentNode = domConstruct.create("div", {"class": "confirmDialogContent", innerHTML: message});
 				var buttonWrapperNode = domConstruct.create("div", {"class": "confirmDialogButtons"}, confirmContentNode);
 				for (var button in buttons) {
-					(function(button) {
+					(function (button) {
 						new Button({
 							label: button,
-							onClick: function() {
+							onClick: function () {
 								if (null != buttons[button]) {
 									/* run callback function */
 									buttons[button]();
@@ -24,7 +24,7 @@ define(
 								dialog.hide();
 							}
 						}).placeAt(buttonWrapperNode).startup();
-					})(button);
+					}(button));
 				}
 				(dialog = new Dialog({
 					title: title,

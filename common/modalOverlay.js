@@ -7,7 +7,7 @@ define(
 		"dojo/dom-style",
 		"dijit/a11yclick"
 	],
-	function(on, keys, dom, domConstruct, domStyle, a11yclick) {
+	function (on, keys, dom, domConstruct, domStyle, a11yclick) {
 		"use strict";
 
 		var
@@ -19,17 +19,17 @@ define(
 		;
 
 		self = {
-			show: function(_modalNode, cancelable, onHide) {
+			show: function (_modalNode, cancelable, onHide) {
 				modalNode = _modalNode;
 
 				overlayNode = domConstruct.create("div", {id: "modalOverlay", tabindex: 0}, document.body);
 				domConstruct.place(modalNode, overlayNode);
 
 				if (cancelable) {
-					on(overlayNode, a11yclick, function() {
+					on(overlayNode, a11yclick, function () {
 						self.hide();
 					});
-					on(overlayNode, "keydown", function(event) {
+					on(overlayNode, "keydown", function (event) {
 						if (keys.ESCAPE === event.keyCode) {
 							self.hide();
 						}
@@ -43,7 +43,7 @@ define(
 				overlayNode.focus();
 			},
 
-			hide: function() {
+			hide: function () {
 				if (self.onHide) {
 					self.onHide();
 				}
@@ -51,7 +51,7 @@ define(
 				domConstruct.destroy(overlayNode);
 			},
 
-			onFocus: function(event) {
+			onFocus: function (event) {
 				/* event.target is not supported by IE < 9 */
 				if (overlayNode !== event.target && !dom.isDescendant(event.target, modalNode)) {
 					event.stopPropagation();
