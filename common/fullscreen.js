@@ -127,14 +127,14 @@ define(
 			onChange: function (listener) {
 				var self = this;
 
-				on(document, "fullscreenchange, webkitfullscreenchange, mozfullscreenchange, msfullscreenchange", function(event) {
+				on(document, "fullscreenchange, webkitfullscreenchange, mozfullscreenchange, msfullscreenchange", function (event) {
 					listener(event, self.isActive());
 				});
 				listeners.push(listener);
 			},
 
 			onError: function (listener) {
-				on(document, "fullscreenerror, webkitfullscreenerror, mozfullscreenerror, msfullscreenerror", function(event) {
+				on(document, "fullscreenerror, webkitfullscreenerror, mozfullscreenerror, msfullscreenerror", function (event) {
 					listener(event);
 				});
 			},

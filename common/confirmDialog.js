@@ -7,24 +7,28 @@ define(
 	function (domConstruct, Button, Dialog) {
 		"use strict";
 
+		var dialog = null;
+		var createButton = function (label, onClickFunc) {
+			return new Button({
+				label: label,
+				onClick: function () {
+					if (null != onClickFunc) {
+						/* run callback function */
+						onClickFunc();
+					}
+					dialog.hide();
+				}
+			});
+		};
+
 		return {
 			confirm: function (title, message, buttons) {
-				var dialog = null;
 				var confirmContentNode = domConstruct.create("div", {"class": "confirmDialogContent", innerHTML: message});
 				var buttonWrapperNode = domConstruct.create("div", {"class": "confirmDialogButtons"}, confirmContentNode);
 				for (var button in buttons) {
-					(function (button) {
-						new Button({
-							label: button,
-							onClick: function () {
-								if (null != buttons[button]) {
-									/* run callback function */
-									buttons[button]();
-								}
-								dialog.hide();
-							}
-						}).placeAt(buttonWrapperNode).startup();
-					}(button));
+					if (buttons.hasOwnProperty(button)) {
+						createButton(button, buttons[button]).placeAt(buttonWrapperNode).startup();
+					}
 				}
 				(dialog = new Dialog({
 					title: title,
