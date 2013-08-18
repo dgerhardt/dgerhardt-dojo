@@ -12,7 +12,7 @@ define(
 			return new Button({
 				label: label,
 				onClick: function () {
-					if (null != onClickFunc) {
+					if (onClickFunc) {
 						/* run callback function */
 						onClickFunc();
 					}
