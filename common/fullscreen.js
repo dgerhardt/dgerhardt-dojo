@@ -137,7 +137,7 @@ define(
 				on(document, "fullscreenerror, webkitfullscreenerror, mozfullscreenerror, msfullscreenerror", function (event) {
 					listener(event);
 				});
-			},
+			}
 		};
 
 		var fullScreenNode = domConstruct.create("div", {id: "fullScreenWrapper"}, document.body);
