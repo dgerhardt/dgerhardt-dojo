@@ -22,7 +22,7 @@ define(
 		};
 
 		return {
-			confirm: function (title, message, buttons) {
+			confirm: function (title, message, buttons, cancelFunc) {
 				var confirmContentNode = domConstruct.create("div", {"class": "confirmDialogContent", innerHTML: message});
 				var buttonWrapperNode = domConstruct.create("div", {"class": "confirmDialogButtons"}, confirmContentNode);
 				for (var button in buttons) {
@@ -30,9 +30,11 @@ define(
 						createButton(button, buttons[button]).placeAt(buttonWrapperNode).startup();
 					}
 				}
+				cancelFunc = cancelFunc || function () {};
 				(dialog = new Dialog({
 					title: title,
-					content: confirmContentNode
+					content: confirmContentNode,
+					onCancel: cancelFunc
 				})).show();
 			}
 		};
