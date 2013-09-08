@@ -8,10 +8,6 @@ define(
 		//"use strict";
 
 		return declare("ContentPane", [ContentPane, Evented], {
-			constructor: function () {
-				this.inherited(arguments);
-			},
-
 			resize: function () {
 				this.inherited(arguments);
 				var w = arguments[0] ? arguments[0].w : -1;
