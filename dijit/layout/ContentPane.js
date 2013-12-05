@@ -32,6 +32,10 @@ define(
 			},
 			
 			startup: function () {
+				if (this._started) {
+					return;
+				}
+				
 				ContentPane.prototype.startup.call(this);
 				this.overlayNode = domConstruct.create("div", {"class": "paneMessageOverlay"}, this.domNode);
 				this.overlayMsgNode = domConstruct.create("div", null, this.overlayNode);
